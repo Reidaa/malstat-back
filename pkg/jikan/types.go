@@ -6,11 +6,17 @@ type Title struct {
 }
 
 type Anime struct {
-	Mal_id  int     `json:"mal_id"`
-	Score   float32 `json:"score"`
-	Rank    int     `json:"rank"`
-	Members int     `json:"members"`
-	Titles  []Title `json:"titles"`
+	Mal_id     int     `json:"mal_id"`
+	Url        string  `json:"url"`
+	Titles     []Title `json:"titles"`
+	Type       string  `json:"type"`
+	Status     string  `json:"status"`
+	Score      float32 `json:"score"`
+	ScoredBy   int     `json:"scored_by"`
+	Rank       int     `json:"rank"` // Ranking from jikan are unreliable
+	Popularity int     `json:"popularity"`
+	Members    int     `json:"members"`
+	Favorites  int     `json:"favorites"`
 }
 
 type Item struct {

@@ -3,6 +3,7 @@ module malstat/scrapper
 go 1.22.1
 
 require (
+	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
 	github.com/joho/godotenv v1.5.1
 	github.com/urfave/cli v1.22.16
 	gorm.io/driver/postgres v1.5.9

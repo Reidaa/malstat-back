@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"malstat/scrapper/pkg/jikan"
+	"malstat/scrapper/pkg/utils"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -22,7 +23,11 @@ func run(connectionString string) error {
 	// 	return err
 	// }
 	// db
-	_, err := jikan.TopAnime(50)
+	d, err := jikan.TopAnimeByRank(1000)
+	if err != nil {
+		return err
+	}
+	err = utils.AnimesToCsv(d, "")
 	if err != nil {
 		return err
 	}

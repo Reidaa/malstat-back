@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"sort"
 	"time"
 )
 
@@ -74,8 +75,35 @@ func TopAnime(n int) (*[]Anime, error) {
 	}
 
 	for i := 0; i != len(data); i++ {
-		fmt.Println(data[i].Titles[0].Title)
+		fmt.Println(data[i].Titles[0].Title, data[i].Rank)
 	}
 
 	return &data, nil
+}
+
+func TopAnimeByRank(maxRank int) ([]Anime, error) {
+	var data []Anime
+	var maxCurrentRank int = 0
+
+	for i := 1; maxCurrentRank < maxRank; i++ {
+		response, err := topAnime(i, "")
+		if err != nil {
+			return nil, err
+		}
+		data = append(data, response.Data...)
+		maxCurrentRank = response.Data[len(response.Data)-1].Rank
+		log.Println("maxCurrentRank", maxCurrentRank)
+	}
+
+	data = RemoveUnrankedAnime(data)
+
+	sort.Slice(data, func(i, j int) bool {
+		return data[i].Score > data[j].Score
+	})
+
+	for i := 0; i != len(data); i++ {
+		fmt.Println(data[i].Titles[0].Title, data[i].Rank)
+	}
+
+	return data, nil
 }
