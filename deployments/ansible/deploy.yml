@@ -1,0 +1,22 @@
+---
+- name: Deploy malstat-scrapper
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    install_loc: /opt/scrapper
+  tasks:
+    - name: Copy the executable to the remote machine
+      ansible.builtin.copy:
+        src: ./scrapper
+        dest: "{{ install_loc }}"
+        backup: true
+        mode: preserve
+
+    - name: Setup the cronjob
+      ansible.builtin.cron:
+        name: malstat-scrapper
+        hour: 4
+        minute: 20
+        job: "{{ install_loc }} > /dev/null"
+        state: present

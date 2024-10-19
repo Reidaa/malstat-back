@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"malstat/scrapper/pkg/jikan"
 	"malstat/scrapper/pkg/utils"
@@ -65,9 +64,13 @@ func app() *cli.App {
 					} else {
 						err := godotenv.Load()
 						if err != nil {
-							return errors.New("error loading .env file")
+							utils.Error.Println("error loading .env file")
 						}
 						connStr = os.Getenv("SCRAPPER_DB_URL")
+					}
+
+					if connStr == "" {
+						utils.Warning.Println("database's connection string not set")
 					}
 
 					err := run(connStr)
