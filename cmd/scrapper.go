@@ -15,15 +15,14 @@ var Release struct {
 	Build   string
 }
 
-func run(n int, connectionString string) error {
+func run(connectionString string) error {
 	// fmt.Printf("%s", connectionString)
 	// db, err := db(connectionString)
 	// if err != nil {
 	// 	return err
 	// }
 	// db
-	fmt.Printf("%d\n", n)
-	err := jikan.JikanTopAnime(n)
+	_, err := jikan.TopAnime(50)
 	if err != nil {
 		return err
 	}
@@ -47,11 +46,6 @@ func app() *cli.App {
 			{
 				Name: "scrap",
 				Flags: []cli.Flag{
-					&cli.IntFlag{
-						Name:     "top, t",
-						Usage:    "lookup the `N` top anime on myanimelist",
-						Required: true,
-					},
 					&cli.StringFlag{
 						Name:     "database, db",
 						Usage:    "connection string to the database (postgres)",
@@ -70,11 +64,12 @@ func app() *cli.App {
 						}
 						connStr = os.Getenv("SCRAPPER_DB_URL")
 					}
-					err := run(ctx.Int("top"), connStr)
 
+					err := run(connStr)
 					if err != nil {
 						return err
 					}
+
 					return nil
 				},
 			},

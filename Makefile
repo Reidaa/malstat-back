@@ -34,4 +34,4 @@ check:
 	go mod tidy
 
 run: install
-	@$(TARGET) --top 200
+	@$(TARGET) scrap

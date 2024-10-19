@@ -2,9 +2,12 @@ package jikan
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
+	"time"
 )
 
 const Base_url string = "https://api.jikan.moe/v4"
@@ -29,9 +32,9 @@ type Item struct {
 }
 
 type Pagination struct {
-	Last_visible_page int    `json:"last_visible_page"`
-	Has_next_page     bool   `json:"has_next_page"`
-	Items             []Item `json:"items"`
+	Last_visible_page int  `json:"last_visible_page"`
+	Has_next_page     bool `json:"has_next_page"`
+	Items             Item `json:"items"`
 }
 
 type Response struct {
@@ -39,34 +42,64 @@ type Response struct {
 	Pagination Pagination `json:"pagination"`
 }
 
-// func GetTopN(n int) (success bool, err error) {
-// 	base_url := "https://api.jikan.moe/v4/"
+func topAnime(page int, animeType string) (*Response, error) {
+	var responseObj Response
+	var url = fmt.Sprintf("%s/top/anime?page=%d", Base_url, page)
 
-// 	page_to_check := n / 25
+	if animeType != "" {
+		url = fmt.Sprintf("%s&type=%s", url, animeType)
+	}
 
-// 	return true, nil
-// }
+	log.Printf("GET %s", url)
 
-func JikanTopAnime(n int) error {
-	response, err := http.Get(fmt.Sprintf("%s/top/anime", Base_url))
+	response, err := http.Get(url)
 	if err != nil {
-		return err
+		return nil, err
+	}
+
+	if response.StatusCode >= 300 {
+		return nil, errors.New(response.Status)
 	}
 
 	responseData, err := io.ReadAll(response.Body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	var responseObj Response
-	json.Unmarshal(responseData, &responseObj)
+	err = json.Unmarshal(responseData, &responseObj)
+	if err != nil {
+		return nil, err
+	}
+	time.Sleep(time.Second)
+	return &responseObj, nil
+}
 
-	for i := 0; i != len(responseObj.Data); i++ {
-		fmt.Println(responseObj.Data[i])
+func TopAnime(n int) (*[]Anime, error) {
+	var data []Anime
+	types := []string{"tv", "movie", "ova", "tv_special", "special"}
+
+	for t := 0; t != len(types); t++ {
+		response, err := topAnime(1, types[t])
+
+		if err != nil {
+			return nil, err
+		}
+
+		data = append(data, response.Data...)
+
+		for i := 2; i <= n/response.Pagination.Items.Per_page; i++ {
+			response, err := topAnime(i, types[t])
+			if err != nil {
+				return nil, err
+			}
+			data = append(data, response.Data...)
+		}
+
 	}
 
-	fmt.Println(responseObj.Data[len(responseObj.Data)-1])
+	for i := 0; i != len(data); i++ {
+		fmt.Println(data[i].Titles[0].Title)
+	}
 
-	// fmt.Println(string(responseData))
-	return nil
+	return &data, nil
 }
