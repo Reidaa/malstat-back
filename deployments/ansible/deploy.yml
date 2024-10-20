@@ -5,6 +5,7 @@
   gather_facts: true
   vars:
     install_loc: /usr/local/bin/malstat-scrapper
+    output_csv: malstat.csv
   tasks:
     - name: Copy the executable to the remote machine
       ansible.builtin.copy:
@@ -18,5 +19,5 @@
         name: malstat-scrapper
         hour: 4
         minute: 20
-        job: "malstat-scrapper scrap > /dev/null"
+        job: "malstat-scrapper scrap --top 500 --csv $HOME/{{ output_csv }} > /dev/null"
         state: present

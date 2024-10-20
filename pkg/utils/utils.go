@@ -52,7 +52,11 @@ func AnimesToCsv(animes []jikan.Anime, filename string) error {
 
 	for i := 0; i != len(animes); i++ {
 		data = append(data, &animeCSV{
-			now, animes[i].Titles[0].Title, animes[i].Rank, animes[i].Score, animes[i].Members, animes[i].Favorites,
+			now,
+			animes[i].Titles[0].Title,
+			animes[i].Rank, animes[i].Score,
+			animes[i].Members,
+			animes[i].Favorites,
 		})
 	}
 

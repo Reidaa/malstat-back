@@ -6,7 +6,6 @@ import (
 	"malstat/scrapper/pkg/utils"
 	"os"
 
-	"github.com/joho/godotenv"
 	"github.com/urfave/cli"
 )
 
@@ -15,20 +14,16 @@ var Release struct {
 	Build   string
 }
 
-func run(connectionString string) error {
-	// fmt.Printf("%s", connectionString)
-	// db, err := db(connectionString)
-	// if err != nil {
-	// 	return err
-	// }
-	// db
-	d, err := jikan.TopAnimeByRank(1000)
+func run(top int, connectionString string, csvFile string) error {
+	d, err := jikan.TopAnimeByRank(top)
 	if err != nil {
 		return err
 	}
-	err = utils.AnimesToCsv(d, "")
-	if err != nil {
-		return err
+	if csvFile != "" {
+		err = utils.AnimesToCsv(d, csvFile)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 
@@ -50,30 +45,32 @@ func app() *cli.App {
 			{
 				Name: "scrap",
 				Flags: []cli.Flag{
+					&cli.IntFlag{
+						Name:     "top",
+						Required: true,
+						Usage:    "Upmost anime to retrieve for storage",
+					},
 					&cli.StringFlag{
-						Name:     "database, db",
-						Usage:    "connection string to the database (postgres)",
+						Name:     "csv",
+						Usage:    "Record to a csv `file`",
 						Required: false,
 					},
 				},
 				Action: func(ctx *cli.Context) error {
-					var connStr string
+					var connStr string = ctx.String("database")
+					var csvFile string = ctx.String("csv")
+					var top int = ctx.Int("top")
 
-					if ctx.String("database") != "" {
-						connStr = ctx.String("database")
-					} else {
-						err := godotenv.Load()
-						if err != nil {
-							utils.Error.Println("error loading .env file")
-						}
-						connStr = os.Getenv("SCRAPPER_DB_URL")
+					if csvFile != "" {
+						utils.Info.Println("Will output to", csvFile)
 					}
 
-					if connStr == "" {
-						utils.Warning.Println("database's connection string not set")
+					if connStr != "" {
+						utils.Info.Println("Will try store in the given database")
 					}
 
-					err := run(connStr)
+					utils.Info.Println("Will fetch up to the top", top, "anime")
+					err := run(top, connStr, csvFile)
 					if err != nil {
 						return err
 					}
@@ -93,7 +90,6 @@ func Run() {
 	app := app()
 
 	if err := app.Run(os.Args); err != nil {
-		// log.Fatal(err)
 		fmt.Println(err)
 		os.Exit(1)
 	}
