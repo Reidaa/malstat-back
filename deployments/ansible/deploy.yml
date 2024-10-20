@@ -4,11 +4,11 @@
   become: true
   gather_facts: true
   vars:
-    install_loc: /opt/scrapper
+    install_loc: /usr/local/bin/malstat-scrapper
   tasks:
     - name: Copy the executable to the remote machine
       ansible.builtin.copy:
-        src: ./scrapper
+        src: ../../scrapper
         dest: "{{ install_loc }}"
         backup: true
         mode: preserve
@@ -18,5 +18,5 @@
         name: malstat-scrapper
         hour: 4
         minute: 20
-        job: "{{ install_loc }} > /dev/null"
+        job: "malstat-scrapper scrap > /dev/null"
         state: present
