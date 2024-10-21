@@ -37,3 +37,7 @@ check:
 
 run: install
 	@$(TARGET) scrap --top 100 --csv $(CSV)
+
+deploy: build
+	ansible-playbook deployments/ansible/deploy.yml -vv 
+	
