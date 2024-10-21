@@ -3,6 +3,7 @@
 SHELL := /bin/sh
 
 TARGET := scrapper
+CSV := malstat.csv
 
 # These will be provided to the target
 BUILD := `git rev-parse HEAD`
@@ -23,6 +24,7 @@ build: $(TARGET)
 
 clean:
 	rm -f $(TARGET)
+	rm -f $(CSV)
 
 install:
 	@go install $(LDFLAGS)
@@ -34,4 +36,4 @@ check:
 	go mod tidy
 
 run: install
-	@$(TARGET) scrap
+	@$(TARGET) scrap --top 100 --csv $(CSV)

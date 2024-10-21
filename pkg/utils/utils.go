@@ -10,19 +10,19 @@ import (
 )
 
 type animeCSV struct {
-	Date      time.Time `csv:"date"`
-	Name      string    `csv:"name"`
-	Rank      int       `csv:"rank"`
-	Score     float32   `csv:"score"`
-	Members   int       `csv:"members"`
-	Favorites int       `csv:"favorites"`
+	Datetime  string  `csv:"datetime"`
+	Name      string  `csv:"name"`
+	Rank      int     `csv:"rank"`
+	Score     float32 `csv:"score"`
+	Members   int     `csv:"members"`
+	Favorites int     `csv:"favorites"`
 }
 
 func AnimesToCsv(animes []jikan.Anime, filename string) error {
 	var file *os.File
 	var err error
 	var data []*animeCSV
-	var now time.Time = time.Now()
+	var now string = time.Now().UTC().Format(time.DateTime)
 
 	if filename == "" {
 		filename = "malstat.csv"
