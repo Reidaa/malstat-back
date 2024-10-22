@@ -1,8 +1,12 @@
 ---
 - name: Deploy malstat-scrapper
-  hosts: all
+  hosts: vps
   become: true
   gather_facts: true
+  vars_prompt:
+    - name: database
+      prompt: "postgreSQL connection string"
+      private: false
   vars:
     install_loc: /usr/local/bin/malstat-scrapper
     output_csv: malstat.csv
@@ -19,5 +23,5 @@
         name: malstat-scrapper
         hour: 4
         minute: 20
-        job: "malstat-scrapper scrap --top 500 --csv $HOME/{{ output_csv }} > /dev/null"
+        job: "malstat-scrapper scrap --top 500 --csv $HOME/{{ output_csv }} --db {{ database }} > /dev/null"
         state: present

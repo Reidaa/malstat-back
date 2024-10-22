@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	"malstat/scrapper/pkg/csv"
+	"malstat/scrapper/pkg/database"
 	"malstat/scrapper/pkg/jikan"
 	"malstat/scrapper/pkg/utils"
 	"os"
@@ -19,12 +21,27 @@ func run(top int, connectionString string, csvFile string) error {
 	if err != nil {
 		return err
 	}
+
+	if connectionString != "" {
+		db, err := database.Db(connectionString)
+		if err != nil {
+			return err
+		}
+		err = database.Prepare(db)
+		if err != nil {
+			return err
+		}
+		database.AnimesToDB(db, d)
+
+	}
+
 	if csvFile != "" {
-		err = utils.AnimesToCsv(d, csvFile)
+		err = csv.AnimesToCsv(d, csvFile)
 		if err != nil {
 			return err
 		}
 	}
+
 	return nil
 
 }
@@ -55,9 +72,14 @@ func app() *cli.App {
 						Usage:    "Record to a csv `file`",
 						Required: false,
 					},
+					&cli.StringFlag{
+						Name:     "db",
+						Usage:    "Record to database using the given postgreSQL connection `string`",
+						Required: false,
+					},
 				},
 				Action: func(ctx *cli.Context) error {
-					var connStr string = ctx.String("database")
+					var connStr string = ctx.String("db")
 					var csvFile string = ctx.String("csv")
 					var top int = ctx.Int("top")
 

@@ -4,15 +4,15 @@ SHELL := /bin/sh
 
 TARGET := scrapper
 CSV := malstat.csv
+DB := 
 
 # These will be provided to the target
 BUILD := `git rev-parse HEAD`
 
-
 # Use linker flags to provide version/build settings to the target
 LDFLAGS=-ldflags "-X=main.Build=$(BUILD)"
 
-.PHONY: all build clean install uninstall check run
+.PHONY: all build clean install uninstall check run deploy
 
 all: check install
 
@@ -36,7 +36,7 @@ check:
 	go mod tidy
 
 run: install
-	@$(TARGET) scrap --top 100 --csv $(CSV)
+	@$(TARGET) scrap --top 100 --csv $(CSV) --db $(DB)
 
 deploy: build
 	ansible-playbook deployments/ansible/deploy.yml -vv 

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
+	"malstat/scrapper/pkg/utils"
 	"net/http"
 	"sort"
 	"time"
@@ -24,7 +24,7 @@ func topAnime(page int, animeType string) (*topAnimeResponse, error) {
 		url = fmt.Sprintf("%s&type=%s", url, animeType)
 	}
 
-	log.Printf("GET %s", url)
+	utils.Debug.Printf("GET %s", url)
 
 	response, err := http.Get(url)
 	if err != nil {
@@ -92,7 +92,7 @@ func TopAnimeByRank(maxRank int) ([]Anime, error) {
 		}
 		data = append(data, response.Data...)
 		maxCurrentRank = response.Data[len(response.Data)-1].Rank
-		log.Println("maxCurrentRank", maxCurrentRank)
+		utils.Debug.Println("maxCurrentRank", maxCurrentRank)
 	}
 
 	data = RemoveUnrankedAnime(data)
@@ -105,5 +105,6 @@ func TopAnimeByRank(maxRank int) ([]Anime, error) {
 		fmt.Println(data[i].Titles[0].Title, data[i].Rank)
 	}
 
+	utils.Info.Println("Finished gathering animes' informations")
 	return data, nil
 }
