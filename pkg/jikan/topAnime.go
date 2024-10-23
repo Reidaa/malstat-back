@@ -105,6 +105,5 @@ func TopAnimeByRank(maxRank int) ([]Anime, error) {
 		fmt.Println(data[i].Titles[0].Title, data[i].Rank)
 	}
 
-	utils.Info.Println("Finished gathering animes' informations")
 	return data, nil
 }

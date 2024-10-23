@@ -21,6 +21,7 @@ func run(top int, connectionString string, csvFile string) error {
 	if err != nil {
 		return err
 	}
+	utils.Info.Println("Finished data gathering")
 
 	if connectionString != "" {
 		db, err := database.Db(connectionString)

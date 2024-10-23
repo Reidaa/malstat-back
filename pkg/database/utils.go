@@ -3,6 +3,7 @@ package database
 import (
 	"malstat/scrapper/pkg/jikan"
 	"malstat/scrapper/pkg/utils"
+	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -11,28 +12,30 @@ import (
 func Db(dsn string) (*gorm.DB, error) {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		utils.Error.Println("failed to connect to database")
+		utils.Error.Println("Failed to connect to database")
 		return nil, err
 	}
-	utils.Info.Println("connected to database")
+	utils.Info.Println("Connected to database")
 	return db, nil
 }
 
 func Prepare(db *gorm.DB) error {
 	err := db.AutoMigrate(&animeDB{})
 	if err != nil {
-		utils.Error.Println("failed to migrate database")
+		utils.Error.Println("Failed to migrate database")
 		return err
 	}
-	utils.Info.Println("migrated the database")
+	utils.Info.Println("Migrated the database")
 	return nil
 }
 
 func AnimesToDB(db *gorm.DB, animes []jikan.Anime) {
 	var data []animeDB
+	var now time.Time = time.Now()
 
 	for i := 0; i != len(animes); i++ {
 		data = append(data, animeDB{
+			Timestamp:  now,
 			MalID:      animes[i].Mal_id,
 			Title:      animes[i].Titles[0].Title,
 			Type:       animes[i].Type,
@@ -47,4 +50,5 @@ func AnimesToDB(db *gorm.DB, animes []jikan.Anime) {
 
 	utils.Info.Println("Writing data to database")
 	db.Create(&data)
+	utils.Info.Println("Finished writing data to database")
 }

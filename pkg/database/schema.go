@@ -1,6 +1,8 @@
 package database
 
 import (
+	"time"
+
 	"gorm.io/gorm"
 )
 
@@ -10,6 +12,7 @@ type Tabler interface {
 
 type animeDB struct {
 	gorm.Model
+	Timestamp  time.Time
 	MalID      int
 	Title      string
 	Type       string
