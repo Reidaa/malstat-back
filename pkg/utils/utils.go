@@ -14,7 +14,7 @@ func FileExists(filename string) bool {
 }
 
 // Info writes logs in the color blue with "INFO: " as prefix
-var Info = log.New(os.Stdout, "\u001b[34mINFO: \u001B[0m", log.LstdFlags|log.Lshortfile)
+var Info = log.New(os.Stdout, "\u001b[34mINFO: \u001B[0m", log.LstdFlags)
 
 // Warning writes logs in the color yellow with "WARNING: " as prefix
 var Warning = log.New(os.Stdout, "\u001b[33mWARNING: \u001B[0m", log.LstdFlags|log.Lshortfile)

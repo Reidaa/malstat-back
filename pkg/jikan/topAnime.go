@@ -92,7 +92,6 @@ func TopAnimeByRank(maxRank int) ([]Anime, error) {
 		}
 		data = append(data, response.Data...)
 		maxCurrentRank = response.Data[len(response.Data)-1].Rank
-		utils.Debug.Println("maxCurrentRank", maxCurrentRank)
 	}
 
 	data = RemoveUnrankedAnime(data)
@@ -100,10 +99,6 @@ func TopAnimeByRank(maxRank int) ([]Anime, error) {
 	sort.Slice(data, func(i, j int) bool {
 		return data[i].Score > data[j].Score
 	})
-
-	for i := 0; i != len(data); i++ {
-		fmt.Println(data[i].Titles[0].Title, data[i].Rank)
-	}
 
 	return data, nil
 }

@@ -17,27 +17,44 @@ var Release struct {
 }
 
 func run(top int, connectionString string, csvFile string) error {
-	d, err := jikan.TopAnimeByRank(top)
+	var data []jikan.Anime
+
+	utils.Info.Println("Checking the top", top, "anime for any new entry")
+	topAnime, err := jikan.TopAnimeByRank(top)
 	if err != nil {
 		return err
 	}
-	utils.Info.Println("Finished data gathering")
 
-	if connectionString != "" {
-		db, err := database.Db(connectionString)
-		if err != nil {
-			return err
-		}
-		err = database.Prepare(db)
-		if err != nil {
-			return err
-		}
-		database.AnimesToDB(db, d)
-
+	db, err := database.Db(connectionString)
+	if err != nil {
+		return err
 	}
 
+	err = database.Prepare(db)
+	if err != nil {
+		return err
+	}
+
+	database.AddToTracked(db, topAnime)
+	tracked := database.RetrieveTracked(db)
+	utils.Info.Println("Fetching", len(tracked), "entries")
+
+	for _, v := range tracked {
+		d, err := jikan.AnimeByID(v.MalID)
+		if err != nil {
+			return err
+		}
+		data = append(data, *d)
+	}
+
+	for _, v := range data {
+		utils.Debug.Println(v.Titles[0].Title)
+	}
+
+	// database.AnimesToDB(db, d)
+
 	if csvFile != "" {
-		err = csv.AnimesToCsv(d, csvFile)
+		err = csv.AnimesToCsv(data, csvFile)
 		if err != nil {
 			return err
 		}
@@ -76,7 +93,7 @@ func app() *cli.App {
 					&cli.StringFlag{
 						Name:     "db",
 						Usage:    "Record to database using the given postgreSQL connection `string`",
-						Required: false,
+						Required: true,
 					},
 				},
 				Action: func(ctx *cli.Context) error {
@@ -88,11 +105,6 @@ func app() *cli.App {
 						utils.Info.Println("Will output to", csvFile)
 					}
 
-					if connStr != "" {
-						utils.Info.Println("Will try store in the given database")
-					}
-
-					utils.Info.Println("Will fetch up to the top", top, "anime")
 					err := run(top, connStr, csvFile)
 					if err != nil {
 						return err

@@ -27,3 +27,14 @@ type animeDB struct {
 func (animeDB) TableName() string {
 	return "animes"
 }
+
+type Tracked struct {
+	gorm.Model
+	MalID int    `gorm:"unique"`
+	Title string `gorm:"unique"`
+	Type  string
+}
+
+func (Tracked) TableName() string {
+	return "tracked"
+}
