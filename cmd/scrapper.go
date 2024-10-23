@@ -51,7 +51,7 @@ func run(top int, connectionString string, csvFile string) error {
 		utils.Debug.Println(v.Titles[0].Title)
 	}
 
-	// database.AnimesToDB(db, d)
+	database.AnimesToDB(db, data)
 
 	if csvFile != "" {
 		err = csv.AnimesToCsv(data, csvFile)
