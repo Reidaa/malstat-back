@@ -13,7 +13,7 @@
   tasks:
     - name: Copy the executable to the remote machine
       ansible.builtin.copy:
-        src: ../../scrapper
+        src: ../../out/scrapper
         dest: "{{ install_loc }}"
         backup: true
         mode: preserve
