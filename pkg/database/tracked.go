@@ -12,6 +12,7 @@ type Tracked struct {
 	MalID    int    `gorm:"unique"`
 	Title    string `gorm:"unique"`
 	ImageUrl string `gorm:"unique"`
+	Rank     int
 	Type     string
 }
 
@@ -27,13 +28,14 @@ func AddToTracked(db *gorm.DB, animes []jikan.Anime) {
 			MalID:    v.Mal_id,
 			Title:    v.Titles[0].Title,
 			ImageUrl: v.Images.Jpg.ImageUrl,
+			Rank:     v.Rank,
 			Type:     "anime",
 		})
 	}
 
 	db.Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "mal_id"}},
-		DoUpdates: clause.AssignmentColumns([]string{"image_url"}),
+		DoUpdates: clause.AssignmentColumns([]string{"image_url", "rank"}),
 	}).Create(&data)
 
 }
