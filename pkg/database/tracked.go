@@ -7,18 +7,34 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+type Tracked struct {
+	gorm.Model
+	MalID    int    `gorm:"unique"`
+	Title    string `gorm:"unique"`
+	ImageUrl string `gorm:"unique"`
+	Type     string
+}
+
+func (Tracked) TableName() string {
+	return "tracked"
+}
+
 func AddToTracked(db *gorm.DB, animes []jikan.Anime) {
 	var data []Tracked
 
-	for i := 0; i != len(animes); i++ {
+	for _, v := range animes {
 		data = append(data, Tracked{
-			MalID: animes[i].Mal_id,
-			Title: animes[i].Titles[0].Title,
-			Type:  "anime",
+			MalID:    v.Mal_id,
+			Title:    v.Titles[0].Title,
+			ImageUrl: v.Images.Jpg.ImageUrl,
+			Type:     "anime",
 		})
 	}
 
-	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&data)
+	db.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "mal_id"}},
+		DoUpdates: clause.AssignmentColumns([]string{"image_url"}),
+	}).Create(&data)
 
 }
 

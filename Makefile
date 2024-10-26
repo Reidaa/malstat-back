@@ -39,7 +39,7 @@ check:
 	go mod tidy
 
 run: install
-	@$(TARGET) scrap --top 200 --csv $(OUT_DIR)/$(CSV) --db $(DB)
+	@$(TARGET) scrap --top 100 --csv $(OUT_DIR)/$(CSV) --db $(DB)
 
 deploy: build
 	ansible-playbook deployments/ansible/deploy.yml -vv 

@@ -22,16 +22,19 @@ func run(top int, connectionString string, csvFile string) error {
 	utils.Info.Println("Checking the top", top, "anime for any new entry")
 	topAnime, err := jikan.TopAnimeByRank(top)
 	if err != nil {
+		utils.Error.Println(err)
 		return err
 	}
 
 	db, err := database.Db(connectionString)
 	if err != nil {
+		utils.Error.Println(err)
 		return err
 	}
 
 	err = database.Prepare(db)
 	if err != nil {
+		utils.Error.Println(err)
 		return err
 	}
 
@@ -42,6 +45,7 @@ func run(top int, connectionString string, csvFile string) error {
 	for _, v := range tracked {
 		d, err := jikan.AnimeByID(v.MalID)
 		if err != nil {
+			utils.Error.Println(err)
 			return err
 		}
 		data = append(data, *d)
@@ -56,6 +60,7 @@ func run(top int, connectionString string, csvFile string) error {
 	if csvFile != "" {
 		err = csv.AnimesToCsv(data, csvFile)
 		if err != nil {
+			utils.Error.Println(err)
 			return err
 		}
 	}
