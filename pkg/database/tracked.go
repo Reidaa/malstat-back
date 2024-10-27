@@ -35,7 +35,7 @@ func AddToTracked(db *gorm.DB, animes []jikan.Anime) {
 
 	db.Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "mal_id"}},
-		DoUpdates: clause.AssignmentColumns([]string{"image_url", "rank"}),
+		DoUpdates: clause.AssignmentColumns([]string{"title", "image_url", "rank"}),
 	}).Create(&data)
 
 }
