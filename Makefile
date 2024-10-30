@@ -1,6 +1,8 @@
 ### THANK U KUBE-VIP
 
-include .env
+ifneq (,$(wildcard ./.env))
+    include .env
+endif
 
 SHELL := /bin/sh
 OUT_DIR = out
