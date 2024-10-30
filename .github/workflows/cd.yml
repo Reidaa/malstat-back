@@ -28,7 +28,7 @@ jobs:
           file: build/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: >-
-            ghcr.io/Reidaa/malstat-scrapper:${{ github.ref_name }},
-            ghcr.io/Reidaa/malstat-scrapper:latest
+            ghcr.io/reidaa/malstat-scrapper:${{ github.ref_name }},
+            ghcr.io/reidaa/malstat-scrapper:latest
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
