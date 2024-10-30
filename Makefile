@@ -12,14 +12,14 @@ TARGET := scrapper
 # These will be provided to the target
 BUILD := `git rev-parse HEAD`
 
-
+OUT_DIR ?= out
+CSV ?= malstat.csv
+DB ?= ${DATABASE}
 REPOSITORY ?= reidaa
-OUT_DIR = out
-CSV := malstat.csv
-DB := ${DATABASE}
-# Use linker flags to provide version/build settings to the target
-LDFLAGS=-ldflags "-X=main.Build=$(BUILD)"
+DOCKERFILE ?= build/Dockerfile
 DOCKERTAG ?= latest
+# Use linker flags to provide version/build settings to the target
+LDFLAGS := -ldflags "-X=main.Build=$(BUILD)"
 
 
 
@@ -60,7 +60,7 @@ check:
 	go vet ./...
 
 docker-build:
-	docker build -f build/Dockerfile -t $(REPOSITORY)/$(TARGET):$(DOCKERTAG) .
+	docker build -f $(DOCKERFILE) -t $(REPOSITORY)/$(TARGET):$(DOCKERTAG) .
 
 docker-run: docker-build
 	docker run --rm $(REPOSITORY)/$(TARGET):$(DOCKERTAG) scrap --top 100 --db $(DB)
