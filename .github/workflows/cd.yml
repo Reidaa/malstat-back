@@ -2,7 +2,8 @@ name: Publish Releases to GitHub Container Registry
 
 on:
   push:
-    branches: [$default-branch]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
