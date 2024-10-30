@@ -35,12 +35,18 @@ install:
 uninstall: clean
 	rm -f $$(which ${TARGET})
 
-check:
-	go mod tidy
-
 run: install
 	@$(TARGET) scrap --top 100 --csv $(OUT_DIR)/$(CSV) --db $(DB)
 
 deploy: build
 	ansible-playbook deployments/ansible/deploy.yml -vv 
 	
+simplify:
+	@gofmt -s -l -w *.go pkg cmd
+
+check:
+	go mod tidy
+	test -z "$(git status --porcelain)"
+	test -z $(shell gofmt -l *.go pkg cmd) || echo "[WARN] Fix formatting issues with 'make simplify'"
+	golangci-lint run
+	go vet ./...

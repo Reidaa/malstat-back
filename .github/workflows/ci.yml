@@ -1,0 +1,31 @@
+name: For each commit and PR
+
+on:
+  push:
+
+env:
+  GO_VERSION: "1.22"
+
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    name: Checks and linters
+    steps:
+      - name: Init
+        run: >
+          sudo apt-get update &&
+          sudo apt-get install -y build-essential golint
+
+      - name: Install golangci-lint
+        run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.55.2
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: All checks
+        run: make check
