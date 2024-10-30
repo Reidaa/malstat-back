@@ -1,4 +1,4 @@
-name: For each commit and PR
+name: CI
 
 on:
   push:
