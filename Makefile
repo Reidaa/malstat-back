@@ -5,17 +5,23 @@ ifneq (,$(wildcard ./.env))
 endif
 
 SHELL := /bin/sh
-OUT_DIR = out
 
+# The name of the executable (default is current directory name)
 TARGET := scrapper
-CSV := malstat.csv
-DB := ${DATABASE}
 
 # These will be provided to the target
 BUILD := `git rev-parse HEAD`
 
+
+REPOSITORY ?= reidaa
+OUT_DIR = out
+CSV := malstat.csv
+DB := ${DATABASE}
 # Use linker flags to provide version/build settings to the target
 LDFLAGS=-ldflags "-X=main.Build=$(BUILD)"
+DOCKERTAG ?= latest
+
+
 
 .PHONY: all build clean install uninstall check run deploy
 
@@ -52,3 +58,9 @@ check:
 	test -z $(shell gofmt -l *.go pkg cmd) || echo "[WARN] Fix formatting issues with 'make simplify'"
 	golangci-lint run
 	go vet ./...
+
+docker-build:
+	docker build -f build/Dockerfile -t $(REPOSITORY)/$(TARGET):$(DOCKERTAG) .
+
+docker-run: docker-build
+	docker run --rm $(REPOSITORY)/$(TARGET):$(DOCKERTAG) scrap --top 100 --db $(DB)
