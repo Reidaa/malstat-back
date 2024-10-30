@@ -1,4 +1,4 @@
-FROM golang:1.22-alpine AS dev
+FROM golang:1.23-alpine AS dev
 RUN apk add --no-cache git make
 RUN adduser -D appuser
 COPY . /src/
