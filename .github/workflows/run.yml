@@ -38,4 +38,4 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           image: ${{ steps.string.outputs.lowercase }}:latest
-          run: version
+          run: scrapper version
