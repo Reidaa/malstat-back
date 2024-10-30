@@ -24,6 +24,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          file: build/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: >-
             ghcr.io/kokuban/scrapper:${{ github.ref_name }},
