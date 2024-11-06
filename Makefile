@@ -64,3 +64,6 @@ docker-build:
 
 docker-run: docker-build
 	docker run --rm $(REPOSITORY)/$(TARGET):$(DOCKERTAG) scrap --top 100 --db $(DB)
+
+docker-run-ghcr:
+	docker run --rm ghcr.io/reidaa/malstat-scrapper:latest scrap --top 100 --db $(DB)
