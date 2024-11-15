@@ -21,7 +21,8 @@ DOCKERTAG ?= latest
 # Use linker flags to provide version/build settings to the target
 LDFLAGS := -ldflags "-X=main.Build=$(BUILD)"
 
-
+init:
+	go install mvdan.cc/gofumpt@latest
 
 .PHONY: all build clean install uninstall check run deploy ansible
 
@@ -54,7 +55,7 @@ lint: build
 	golangci-lint run --enable-all --disable tagliatelle --disable wsl --disable varnamelen --disable exhaustruct --disable depguard 
 
 format:
-	gofmt -s -l -w *.go pkg cmd
+	gofumpt -l -w .
 
 ci_check:
 	go mod tidy

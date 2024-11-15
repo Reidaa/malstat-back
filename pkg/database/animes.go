@@ -1,9 +1,10 @@
 package database
 
 import (
+	"time"
+
 	"malstat/scrapper/pkg/jikan"
 	"malstat/scrapper/pkg/utils"
-	"time"
 
 	"gorm.io/gorm"
 )

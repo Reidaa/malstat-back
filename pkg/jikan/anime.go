@@ -5,9 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"malstat/scrapper/pkg/utils"
 	"net/http"
 	"time"
+
+	"malstat/scrapper/pkg/utils"
 )
 
 type AnimeResponse struct {
@@ -16,7 +17,7 @@ type AnimeResponse struct {
 
 func AnimeByID(id int) (*Anime, error) {
 	var responseObj AnimeResponse
-	var url = fmt.Sprintf("%s/anime/%d", Base_url, id)
+	url := fmt.Sprintf("%s/anime/%d", Base_url, id)
 
 	utils.Debug.Printf("GET %s", url)
 

@@ -2,11 +2,12 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"malstat/scrapper/pkg/csv"
 	"malstat/scrapper/pkg/database"
 	"malstat/scrapper/pkg/jikan"
 	"malstat/scrapper/pkg/utils"
-	"os"
 
 	"github.com/urfave/cli"
 )
@@ -70,7 +71,6 @@ func run(top int, connectionString string, csvFile string) error {
 	}
 
 	return nil
-
 }
 
 func app() *cli.App {
@@ -130,7 +130,6 @@ func app() *cli.App {
 
 // starts the command parsing process
 func Run() {
-
 	app := app()
 
 	if err := app.Run(os.Args); err != nil {

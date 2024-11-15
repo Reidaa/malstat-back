@@ -37,7 +37,6 @@ func UpsertTrackedAnimes(db *gorm.DB, animes []jikan.Anime) {
 		Columns:   []clause.Column{{Name: "mal_id"}},
 		DoUpdates: clause.AssignmentColumns([]string{"title", "image_url", "rank"}),
 	}).Create(&data)
-
 }
 
 func RetrieveTracked(db *gorm.DB) []Tracked {

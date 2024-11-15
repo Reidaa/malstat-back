@@ -5,10 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"malstat/scrapper/pkg/utils"
 	"net/http"
 	"sort"
 	"time"
+
+	"malstat/scrapper/pkg/utils"
 )
 
 type topAnimeResponse struct {
@@ -18,7 +19,7 @@ type topAnimeResponse struct {
 
 func topAnime(page int, animeType string) (*topAnimeResponse, error) {
 	var responseObj topAnimeResponse
-	var url = fmt.Sprintf("%s/top/anime?page=%d", Base_url, page)
+	url := fmt.Sprintf("%s/top/anime?page=%d", Base_url, page)
 
 	if animeType != "" {
 		url = fmt.Sprintf("%s&type=%s", url, animeType)
@@ -58,7 +59,6 @@ func TopAnime(n int) (*[]Anime, error) {
 
 	for t := 0; t != len(types); t++ {
 		response, err := topAnime(1, types[t])
-
 		if err != nil {
 			return nil, err
 		}

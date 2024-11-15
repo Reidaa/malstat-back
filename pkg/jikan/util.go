@@ -2,10 +2,12 @@ package jikan
 
 import "time"
 
-const Base_url string = "https://api.jikan.moe/v4"
-const Cooldown time.Duration = time.Second
-const MaxAllowedHitPerDay int = 60 * 60 * 24
-const MaxSafeHitPerDay int = 60 * 60 * 20
+const (
+	Base_url            string        = "https://api.jikan.moe/v4"
+	Cooldown            time.Duration = time.Second
+	MaxAllowedHitPerDay int           = 60 * 60 * 24
+	MaxSafeHitPerDay    int           = 60 * 60 * 20
+)
 
 func RemoveUnrankedAnime(in []Anime) []Anime {
 	var out []Anime

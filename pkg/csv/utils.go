@@ -1,10 +1,11 @@
 package csv
 
 import (
-	"malstat/scrapper/pkg/jikan"
-	"malstat/scrapper/pkg/utils"
 	"os"
 	"time"
+
+	"malstat/scrapper/pkg/jikan"
+	"malstat/scrapper/pkg/utils"
 
 	"github.com/gocarina/gocsv"
 )
