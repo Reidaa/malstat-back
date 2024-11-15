@@ -17,7 +17,7 @@ type AnimeResponse struct {
 
 func AnimeByID(id int) (*Anime, error) {
 	var responseObj AnimeResponse
-	url := fmt.Sprintf("%s/anime/%d", Base_url, id)
+	url := fmt.Sprintf("%s/anime/%d", BaseURL, id)
 
 	utils.Debug.Printf("GET %s", url)
 

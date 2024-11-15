@@ -3,7 +3,7 @@ package jikan
 import "time"
 
 const (
-	Base_url            string        = "https://api.jikan.moe/v4"
+	BaseURL             string        = "https://api.jikan.moe/v4"
 	Cooldown            time.Duration = time.Second
 	MaxAllowedHitPerDay int           = 60 * 60 * 24
 	MaxSafeHitPerDay    int           = 60 * 60 * 20

@@ -19,7 +19,7 @@ type topAnimeResponse struct {
 
 func topAnime(page int, animeType string) (*topAnimeResponse, error) {
 	var responseObj topAnimeResponse
-	url := fmt.Sprintf("%s/top/anime?page=%d", Base_url, page)
+	url := fmt.Sprintf("%s/top/anime?page=%d", BaseURL, page)
 
 	if animeType != "" {
 		url = fmt.Sprintf("%s&type=%s", url, animeType)
