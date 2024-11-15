@@ -1,4 +1,4 @@
-name: Publish Releases to GitHub Container Registry
+name: CD
 
 on:
   workflow_run:
