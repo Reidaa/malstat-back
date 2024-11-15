@@ -111,7 +111,7 @@ func app() *cli.App {
 					var top int = ctx.Int("top")
 
 					if csvFile != "" {
-						utils.Info.Println("Will output to", csvFile)
+						utils.Info.Println("Output to", csvFile)
 					}
 
 					err := run(top, connStr, csvFile)

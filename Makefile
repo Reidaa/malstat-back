@@ -45,7 +45,7 @@ uninstall: clean
 	rm -f $$(which ${TARGET})
 
 run: install
-	@$(TARGET) scrap --top 100 --csv $(BIN_DIR)/$(CSV) --db $(DB)
+	@$(TARGET) scrap --top 100 --db $(DB)
 
 ansible:
 	ansible-playbook deployments/ansible/deploy.yml -vv 

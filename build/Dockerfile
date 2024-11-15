@@ -25,6 +25,6 @@ RUN adduser \
     appuser
 USER appuser
 
-COPY --from=build /src/out/scrapper /
+COPY --from=build /src/bin/scrapper /
 
 ENTRYPOINT ["/scrapper"]

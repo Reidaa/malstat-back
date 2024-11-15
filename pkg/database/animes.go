@@ -47,6 +47,6 @@ func InsertAnimes(db *gorm.DB, animes []jikan.Anime) {
 	}
 
 	utils.Info.Println("Writing data to database")
-	db.Create(&data)
+	db.CreateInBatches(&data, 100)
 	utils.Info.Println("Finished writing data to database")
 }
