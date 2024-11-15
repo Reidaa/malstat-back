@@ -2,6 +2,7 @@ package database
 
 import (
 	"malstat/scrapper/pkg/jikan"
+	"malstat/scrapper/pkg/utils"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -33,10 +34,13 @@ func UpsertTrackedAnimes(db *gorm.DB, animes []jikan.Anime) {
 		})
 	}
 
-	db.Clauses(clause.OnConflict{
-		Columns:   []clause.Column{{Name: "mal_id"}},
-		DoUpdates: clause.AssignmentColumns([]string{"title", "image_url", "rank"}),
-	}).Create(&data)
+	for _, d := range data {
+		utils.Debug.Println("Upserting in database:", d)
+		db.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "mal_id"}},
+			DoUpdates: clause.AssignmentColumns([]string{"title", "image_url", "rank"}),
+		})
+	}
 }
 
 func RetrieveTracked(db *gorm.DB) []Tracked {
