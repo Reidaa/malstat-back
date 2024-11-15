@@ -3,10 +3,9 @@ package database
 import (
 	"time"
 
+	"gorm.io/gorm"
 	"malstat/scrapper/pkg/jikan"
 	"malstat/scrapper/pkg/utils"
-
-	"gorm.io/gorm"
 )
 
 type animeDB struct {

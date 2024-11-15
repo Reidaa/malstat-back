@@ -53,11 +53,11 @@ ansible:
 deploy: build ansible clean
 
 lint: build
-	golangci-lint run --enable-all --disable tagliatelle --disable wsl --disable varnamelen --disable exhaustruct --disable depguard 
+	golangci-lint run --enable-all --disable tagliatelle --disable wsl --disable varnamelen --disable exhaustruct --disable depguard -D goimports
 
 format:
-	gci write ./**/*.go
-	gofumpt -l -w .
+	gci write *.go pkg cmd
+	gofumpt -l -w *.go pkg cmd
 
 ci_check:
 	go mod tidy
