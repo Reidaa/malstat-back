@@ -28,4 +28,4 @@ jobs:
           go-version-file: go.mod
 
       - name: All checks
-        run: make check
+        run: make ci_check

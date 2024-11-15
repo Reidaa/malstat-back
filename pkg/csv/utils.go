@@ -44,7 +44,7 @@ func AnimesToCsv(animes []jikan.Anime, filename string) error {
 	for i := 0; i != len(animes); i++ {
 		data = append(data, anime{
 			Datetime:   now,
-			MalID:      animes[i].Mal_id,
+			MalID:      animes[i].MalID,
 			Title:      animes[i].Titles[0].Title,
 			Type:       animes[i].Type,
 			Rank:       animes[i].Rank,

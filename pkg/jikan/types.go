@@ -6,9 +6,9 @@ type Title struct {
 }
 
 type Image struct {
-	ImageUrl      string `json:"image_url"`
-	SmallImageUrl string `json:"small_image_url"`
-	LargeImageUrl string `json:"large_image_url"`
+	ImageURL      string `json:"image_url"`
+	SmallImageURL string `json:"small_image_url"`
+	LargeImageURL string `json:"large_image_url"`
 }
 
 type AnimeImage struct {
@@ -17,8 +17,8 @@ type AnimeImage struct {
 }
 
 type Anime struct {
-	Mal_id     int        `json:"mal_id"`
-	Url        string     `json:"url"`
+	MalID      int        `json:"mal_id"`
+	URL        string     `json:"url"`
 	Images     AnimeImage `json:"images"`
 	Titles     []Title    `json:"titles"`
 	Type       string     `json:"type"`
@@ -32,13 +32,13 @@ type Anime struct {
 }
 
 type Item struct {
-	Count    int `json:"count"`
-	Total    int `json:"total"`
-	Per_page int `json:"per_page"`
+	Count   int `json:"count"`
+	Total   int `json:"total"`
+	PerPage int `json:"per_page"`
 }
 
 type Pagination struct {
-	Last_visible_page int  `json:"last_visible_page"`
-	Has_next_page     bool `json:"has_next_page"`
-	Items             Item `json:"items"`
+	LastVisiblePage int  `json:"last_visible_page"`
+	HasNextPage     bool `json:"has_next_page"`
+	Items           Item `json:"items"`
 }

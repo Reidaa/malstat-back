@@ -33,7 +33,7 @@ func InsertAnimes(db *gorm.DB, animes []jikan.Anime) {
 	for _, v := range animes {
 		data = append(data, animeDB{
 			Timestamp:  now,
-			MalID:      v.Mal_id,
+			MalID:      v.MalID,
 			Title:      v.Titles[0].Title,
 			Type:       v.Type,
 			Rank:       v.Rank,

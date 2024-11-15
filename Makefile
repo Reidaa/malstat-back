@@ -12,7 +12,7 @@ TARGET := scrapper
 # These will be provided to the target
 BUILD := `git rev-parse HEAD`
 
-OUT_DIR ?= out
+BIN_DIR ?= bin
 CSV ?= malstat.csv
 DB ?= ${DATABASE}
 REPOSITORY ?= reidaa
@@ -28,14 +28,13 @@ LDFLAGS := -ldflags "-X=main.Build=$(BUILD)"
 all: check install
 
 $(TARGET):
-	go build $(LDFLAGS) -o $(OUT_DIR)/$(TARGET)
+	go build $(LDFLAGS) -o $(BIN_DIR)/$(TARGET)
 
 build: $(TARGET)
 	@true
 
 clean:
-	rm -f $(OUT_DIR)/$(TARGET)
-	rm -f $(OUT_DIR)/$(CSV)
+	rm -rf $(BIN_DIR)
 
 install:
 	@go install $(LDFLAGS)
@@ -44,20 +43,23 @@ uninstall: clean
 	rm -f $$(which ${TARGET})
 
 run: install
-	@$(TARGET) scrap --top 100 --csv $(OUT_DIR)/$(CSV) --db $(DB)
+	@$(TARGET) scrap --top 100 --csv $(BIN_DIR)/$(CSV) --db $(DB)
 
 ansible:
 	ansible-playbook deployments/ansible/deploy.yml -vv 
 
 deploy: build ansible clean
-	
-simplify:
-	@gofmt -s -l -w *.go pkg cmd
 
-check:
+lint: build
+	golangci-lint run --enable-all --disable tagliatelle --disable wsl --disable varnamelen --disable exhaustruct --disable depguard 
+
+format:
+	gofmt -s -l -w *.go pkg cmd
+
+ci_check:
 	go mod tidy
 	test -z "$(git status --porcelain)"
-	test -z $(shell gofmt -l *.go pkg cmd) || echo "[WARN] Fix formatting issues with 'make simplify'"
+	test -z $(shell gofmt -l *.go pkg cmd) || echo "[WARN] Fix formatting issues with 'make format'"
 	golangci-lint run
 	go vet ./...
 

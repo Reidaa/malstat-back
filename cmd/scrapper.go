@@ -19,7 +19,7 @@ var Release struct {
 func run(top int, connectionString string, csvFile string) error {
 	var data []jikan.Anime
 
-	db, err := database.Db(connectionString)
+	db, err := database.DB(connectionString)
 	if err != nil {
 		utils.Error.Println(err)
 		return err
@@ -81,7 +81,7 @@ func app() *cli.App {
 				Name:    "version",
 				Aliases: []string{"v"},
 				Usage:   "Version and Release information",
-				Action: func(ctx *cli.Context) error {
+				Action: func(_ *cli.Context) error {
 					fmt.Printf("Build:\t%s\n", Release.Build)
 					return nil
 				},

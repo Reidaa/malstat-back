@@ -11,7 +11,7 @@ type Tracked struct {
 	gorm.Model
 	MalID    int    `gorm:"unique"`
 	Title    string `gorm:"unique"`
-	ImageUrl string `gorm:"unique"`
+	ImageURL string `gorm:"unique"`
 	Rank     int
 	Type     string
 }
@@ -25,9 +25,9 @@ func UpsertTrackedAnimes(db *gorm.DB, animes []jikan.Anime) {
 
 	for _, v := range animes {
 		data = append(data, Tracked{
-			MalID:    v.Mal_id,
+			MalID:    v.MalID,
 			Title:    v.Titles[0].Title,
-			ImageUrl: v.Images.Jpg.ImageUrl,
+			ImageURL: v.Images.Jpg.ImageURL,
 			Rank:     v.Rank,
 			Type:     "anime",
 		})
@@ -40,7 +40,10 @@ func UpsertTrackedAnimes(db *gorm.DB, animes []jikan.Anime) {
 
 }
 
-func RetrieveTracked(db *gorm.DB) (result []Tracked) {
+func RetrieveTracked(db *gorm.DB) []Tracked {
+	var result []Tracked
+
 	db.Find(&result)
-	return
+
+	return result
 }

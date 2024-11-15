@@ -53,6 +53,7 @@ func topAnime(page int, animeType string) (*topAnimeResponse, error) {
 
 func TopAnime(n int) (*[]Anime, error) {
 	var data []Anime
+
 	types := []string{"tv", "movie", "ova", "tv_special", "special"}
 
 	for t := 0; t != len(types); t++ {
@@ -64,14 +65,13 @@ func TopAnime(n int) (*[]Anime, error) {
 
 		data = append(data, response.Data...)
 
-		for i := 2; i <= n/response.Pagination.Items.Per_page; i++ {
+		for i := 2; i <= n/response.Pagination.Items.PerPage; i++ {
 			response, err := topAnime(i, types[t])
 			if err != nil {
 				return nil, err
 			}
 			data = append(data, response.Data...)
 		}
-
 	}
 
 	for i := 0; i != len(data); i++ {
