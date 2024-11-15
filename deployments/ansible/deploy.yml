@@ -44,7 +44,7 @@
 
     - name: Copy scrapper binary to {{ install_loc }}
       ansible.builtin.copy:
-        src: ../../out/scrapper
+        src: ../../bin/scrapper
         dest: "{{ install_loc }}"
         backup: true
         mode: preserve

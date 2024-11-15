@@ -9,9 +9,9 @@ import (
 
 type Tracked struct {
 	gorm.Model
-	MalID    int    `gorm:"unique"`
+	MalID    int    `gorm:"unique;column:mal_id"`
 	Title    string `gorm:"unique"`
-	ImageURL string `gorm:"unique"`
+	ImageURL string `gorm:"unique;column:image_url"`
 	Rank     int
 	Type     string
 }
