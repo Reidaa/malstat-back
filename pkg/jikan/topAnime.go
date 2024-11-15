@@ -75,7 +75,7 @@ func TopAnime(n int) (*[]Anime, error) {
 	}
 
 	for i := 0; i != len(data); i++ {
-		fmt.Println(data[i].Titles[0].Title, data[i].Rank)
+		utils.Debug.Println(data[i].Titles[0].Title, data[i].Rank)
 	}
 
 	return &data, nil
