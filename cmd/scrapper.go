@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/urfave/cli"
 	"malstat/scrapper/pkg/csv"
 	"malstat/scrapper/pkg/database"
 	"malstat/scrapper/pkg/jikan"
 	"malstat/scrapper/pkg/utils"
+
+	"github.com/urfave/cli"
 )
 
 var Release struct {

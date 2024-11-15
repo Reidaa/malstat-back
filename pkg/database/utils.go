@@ -1,9 +1,10 @@
 package database
 
 import (
+	"malstat/scrapper/pkg/utils"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"malstat/scrapper/pkg/utils"
 )
 
 func DB(dsn string) (*gorm.DB, error) {
