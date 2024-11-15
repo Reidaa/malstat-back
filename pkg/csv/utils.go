@@ -4,10 +4,9 @@ import (
 	"os"
 	"time"
 
+	"github.com/gocarina/gocsv"
 	"malstat/scrapper/pkg/jikan"
 	"malstat/scrapper/pkg/utils"
-
-	"github.com/gocarina/gocsv"
 )
 
 func AnimesToCsv(animes []jikan.Anime, filename string) error {

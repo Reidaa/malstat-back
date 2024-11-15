@@ -22,6 +22,7 @@ DOCKERTAG ?= latest
 LDFLAGS := -ldflags "-X=main.Build=$(BUILD)"
 
 init:
+	go install github.com/daixiang0/gci@latest
 	go install mvdan.cc/gofumpt@latest
 
 .PHONY: all build clean install uninstall check run deploy ansible
@@ -55,6 +56,7 @@ lint: build
 	golangci-lint run --enable-all --disable tagliatelle --disable wsl --disable varnamelen --disable exhaustruct --disable depguard 
 
 format:
+	gci write ./**/*.go
 	gofumpt -l -w .
 
 ci_check:

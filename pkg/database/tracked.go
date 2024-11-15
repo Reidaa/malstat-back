@@ -1,10 +1,9 @@
 package database
 
 import (
-	"malstat/scrapper/pkg/jikan"
-
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"malstat/scrapper/pkg/jikan"
 )
 
 type Tracked struct {
