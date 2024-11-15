@@ -20,7 +20,7 @@ func (Tracked) TableName() string {
 	return "tracked"
 }
 
-func AddToTracked(db *gorm.DB, animes []jikan.Anime) {
+func UpsertTrackedAnimes(db *gorm.DB, animes []jikan.Anime) {
 	var data []Tracked
 
 	for _, v := range animes {

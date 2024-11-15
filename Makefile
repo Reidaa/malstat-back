@@ -23,12 +23,12 @@ LDFLAGS := -ldflags "-X=main.Build=$(BUILD)"
 
 
 
-.PHONY: all build clean install uninstall check run deploy
+.PHONY: all build clean install uninstall check run deploy ansible
 
 all: check install
 
 $(TARGET):
-	@go build $(LDFLAGS) -o $(OUT_DIR)/$(TARGET)
+	go build $(LDFLAGS) -o $(OUT_DIR)/$(TARGET)
 
 build: $(TARGET)
 	@true
@@ -46,8 +46,10 @@ uninstall: clean
 run: install
 	@$(TARGET) scrap --top 100 --csv $(OUT_DIR)/$(CSV) --db $(DB)
 
-deploy: build
+ansible:
 	ansible-playbook deployments/ansible/deploy.yml -vv 
+
+deploy: build ansible clean
 	
 simplify:
 	@gofmt -s -l -w *.go pkg cmd

@@ -26,7 +26,7 @@ func (animeDB) TableName() string {
 	return "animes"
 }
 
-func AnimesToDB(db *gorm.DB, animes []jikan.Anime) {
+func InsertAnimes(db *gorm.DB, animes []jikan.Anime) {
 	var data []animeDB
 	var now time.Time = time.Now()
 

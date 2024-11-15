@@ -3,25 +3,56 @@
   hosts: vps
   become: true
   gather_facts: true
-  vars_prompt:
-    - name: database
-      prompt: "postgreSQL connection string"
-      private: false
   vars:
     install_loc: /usr/local/bin/malstat-scrapper
     output_csv: malstat.csv
+    database: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      64653664653461643661643738363562656438373932373137343235343031646563363234663866
+      3035613461643636643030626533366239623835343738310a303666633162633561613837323639
+      64386231373163376364313432653062656530346134643365653831666362373130636230363166
+      3463656333353363630a376130326333666437353732353733303562316564326332353966303361
+      61636335613530316664303238623562666661373239666433633437636134646534306631633331
+      62643239643234626532303734356539613035323939613064663565316563623861623731613532
+      33633432656262366562306337633634613832373434633436343366383231326635343634306236
+      34383038363637356437666433376662393737346539613131613039633132363731313062363261
+      32613763393731386235643061653636626638326531376462326239336130623133356466633232
+      3633316164626234316238633033393635666635343263613537
+    log_dir: /var/log/malstat
+    log_file: "{{ log_dir }}/scrapper.log"
+
   tasks:
-    - name: Copy the executable to the remote machine
+    - name: Ensure log directory exists
+      ansible.builtin.file:
+        path: "{{ log_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Add log rotation configuration for {{ log_file }}
+      ansible.builtin.blockinfile:
+        path: "/etc/logrotate.d/ansible"
+        block: "{{ item.conf }}"
+        create: true
+        mode: "0644"
+      loop:
+        - conf: |
+            {{ log_file }} {
+                  daily
+                  rotate 7
+                  dateext
+            }
+
+    - name: Copy scrapper binary to {{ install_loc }}
       ansible.builtin.copy:
         src: ../../out/scrapper
         dest: "{{ install_loc }}"
         backup: true
         mode: preserve
 
-    - name: Setup the cronjob
+    - name: Schedule scrapper
       ansible.builtin.cron:
         name: malstat-scrapper
         hour: 4
         minute: 20
-        job: "malstat-scrapper scrap --top 500 --csv $HOME/{{ output_csv }} --db {{ database }} > /dev/null"
+        job: "malstat-scrapper scrap --top 500 --db {{ database }} > {{ log_file }} 2>&1"
         state: present
