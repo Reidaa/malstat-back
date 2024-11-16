@@ -30,7 +30,7 @@
 
     - name: Add log rotation configuration for {{ log_file }}
       ansible.builtin.blockinfile:
-        path: "/etc/logrotate.d/ansible"
+        path: "/etc/logrotate.d/malstat-scrapper"
         block: "{{ item.conf }}"
         create: true
         mode: "0644"
@@ -40,9 +40,6 @@
                   daily
                   rotate 7
                   dateext
-                  nocompress
-                  missingok
-                  create
             }
 
     - name: Copy scrapper binary to {{ install_loc }}
@@ -55,7 +52,7 @@
     - name: Schedule scrapper
       ansible.builtin.cron:
         name: malstat-scrapper
-        hour: 4
-        minute: 20
+        hour: 12
+        minute: 0
         job: "malstat-scrapper scrap --top 500 --db {{ database }} > {{ log_file }} 2>&1"
         state: present
