@@ -128,7 +128,7 @@ func app() *cli.App {
 	return app
 }
 
-// starts the command parsing process
+// Run starts the command parsing process
 func Run() {
 	app := app()
 

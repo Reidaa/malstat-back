@@ -25,7 +25,7 @@ type Anime struct {
 	Status     string     `json:"status"`
 	Score      float32    `json:"score"`
 	ScoredBy   int        `json:"scored_by"`
-	Rank       int        `json:"rank"` // Ranking are not accurates
+	Rank       int        `json:"rank"` // Ranking are not accurate
 	Popularity int        `json:"popularity"`
 	Members    int        `json:"members"`
 	Favorites  int        `json:"favorites"`
