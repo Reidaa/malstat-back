@@ -17,7 +17,7 @@ var Release struct {
 	Build   string
 }
 
-func run(top int, connectionString string, csvFile string) error {
+func scrap(top int, connectionString string, csvFile string) error {
 	var data []jikan.Anime
 
 	db, err := database.DB(connectionString)
@@ -95,11 +95,6 @@ func app() *cli.App {
 						Usage:    "Upmost anime to retrieve for storage",
 					},
 					&cli.StringFlag{
-						Name:     "csv",
-						Usage:    "Record to a csv `file`",
-						Required: false,
-					},
-					&cli.StringFlag{
 						Name:     "db",
 						Usage:    "Record to database using the given postgreSQL connection `string`",
 						Required: true,
@@ -114,7 +109,7 @@ func app() *cli.App {
 						utils.Info.Println("Output to", csvFile)
 					}
 
-					err := run(top, connStr, csvFile)
+					err := scrap(top, connStr, csvFile)
 					if err != nil {
 						return err
 					}
