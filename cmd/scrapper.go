@@ -4,74 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"malstat/scrapper/pkg/csv"
-	"malstat/scrapper/pkg/database"
-	"malstat/scrapper/pkg/jikan"
+	"malstat/scrapper/internal"
 	"malstat/scrapper/pkg/utils"
 
 	"github.com/urfave/cli"
 )
-
-var Release struct {
-	Version string
-	Build   string
-}
-
-func scrap(top int, connectionString string, csvFile string) error {
-	var data []jikan.Anime
-
-	db, err := database.DB(connectionString)
-	if err != nil {
-		utils.Error.Println(err)
-		return err
-	}
-
-	err = database.Prepare(db)
-	if err != nil {
-		utils.Error.Println(err)
-		return err
-	}
-
-	if len(database.RetrieveTracked(db)) >= jikan.MaxSafeHitPerDay {
-		utils.Warning.Println("Tracked anime limit reached, skipping new anime retrieval")
-	} else {
-		utils.Info.Println("Checking the top", top, "anime for any new entry")
-		topAnime, err := jikan.TopAnimeByRank(top)
-		if err != nil {
-			utils.Error.Println(err)
-			return err
-		}
-		database.UpsertTrackedAnimes(db, topAnime)
-	}
-
-	tracked := database.RetrieveTracked(db)
-	utils.Info.Println("Fetching", len(tracked), "entries")
-
-	for _, v := range tracked {
-		d, err := jikan.AnimeByID(v.MalID)
-		if err != nil {
-			utils.Warning.Println(err, "| Skipping this entry")
-		} else {
-			data = append(data, *d)
-		}
-	}
-
-	for _, v := range data {
-		utils.Debug.Println(v.Titles[0].Title)
-	}
-
-	database.InsertAnimes(db, data)
-
-	if csvFile != "" {
-		err = csv.AnimesToCsv(data, csvFile)
-		if err != nil {
-			utils.Error.Println(err)
-			return err
-		}
-	}
-
-	return nil
-}
 
 func app() *cli.App {
 	app := &cli.App{
@@ -82,7 +19,7 @@ func app() *cli.App {
 				Aliases: []string{"v"},
 				Usage:   "Version and Release information",
 				Action: func(_ *cli.Context) error {
-					fmt.Printf("Build:\t%s\n", Release.Build)
+					internal.Version()
 					return nil
 				},
 			},
@@ -109,12 +46,31 @@ func app() *cli.App {
 						utils.Info.Println("Output to", csvFile)
 					}
 
-					err := scrap(top, connStr, csvFile)
+					err := internal.Scrap(top, connStr, csvFile)
 					if err != nil {
 						return err
 					}
 
 					return nil
+				},
+			},
+			{
+				Name:  "serve",
+				Usage: "Start the REST API",
+				Flags: []cli.Flag{
+					&cli.IntFlag{
+						Name:     "port",
+						Required: false,
+						Usage:    "",
+						Value:    8080,
+					},
+				},
+				Action: func(ctx *cli.Context) error {
+					if err := internal.Serve(ctx.Int("port")); err != nil {
+						return err
+					} else {
+						return nil
+					}
 				},
 			},
 		},

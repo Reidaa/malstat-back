@@ -21,13 +21,14 @@ DOCKERTAG ?= latest
 # Use linker flags to provide version/build settings to the target
 LDFLAGS := -ldflags "-X=main.Build=$(BUILD)"
 
-init:
-	go install github.com/daixiang0/gci@latest
-	go install mvdan.cc/gofumpt@latest
 
 .PHONY: all build clean install uninstall check run deploy ansible
 
-all: check install
+all: build
+
+requirements:
+	go install github.com/daixiang0/gci@latest
+	go install mvdan.cc/gofumpt@latest
 
 $(TARGET):
 	go build $(LDFLAGS) -o $(BIN_DIR)/$(TARGET)
@@ -39,13 +40,22 @@ clean:
 	rm -rf $(BIN_DIR)
 
 install:
-	@go install $(LDFLAGS)
+	go install $(LDFLAGS)
 
 uninstall: clean
 	rm -f $$(which ${TARGET})
 
 run: install
-	@$(TARGET) scrap --top 100 --db $(DB)
+	$(TARGET) scrap --top 100 --db $(DB)
+
+run-help: install
+	$(TARGET) help
+
+run-version: install
+	$(TARGET) version
+
+run-serve: install
+	$(TARGET) serve
 
 ansible:
 	ansible-playbook deployments/ansible/deploy.yml -vv 
