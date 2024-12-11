@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Struct representing an anime record in the database
 type animeDB struct {
 	gorm.Model
 	Timestamp  time.Time
@@ -27,6 +28,7 @@ func (animeDB) TableName() string {
 	return "animes"
 }
 
+// Inserts a list of anime data into the database.
 func InsertAnimes(db *gorm.DB, animes []jikan.Anime) {
 	var data []animeDB
 	var now time.Time = time.Now()

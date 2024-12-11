@@ -10,6 +10,7 @@ import (
 	"github.com/urfave/cli"
 )
 
+// app initializes and returns a new CLI application.
 func app() *cli.App {
 	app := &cli.App{
 		Name: "scrapper",
@@ -79,7 +80,7 @@ func app() *cli.App {
 	return app
 }
 
-// Run starts the command parsing process
+// Run executes the CLI application.
 func Run() {
 	app := app()
 

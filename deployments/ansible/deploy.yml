@@ -1,6 +1,6 @@
 ---
 - name: Deploy malstat-scrapper
-  hosts: vps
+  hosts: prod
   become: true
   gather_facts: true
   vars:

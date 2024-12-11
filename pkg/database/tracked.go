@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+// Struct representing a tracked anime record in the database.
 type Tracked struct {
 	gorm.Model
 	MalID    int    `gorm:"unique;column:mal_id"`
@@ -21,6 +22,7 @@ func (Tracked) TableName() string {
 	return "tracked"
 }
 
+// Upserts a list of tracked anime data into the database.
 func UpsertTrackedAnimes(db *gorm.DB, animes []jikan.Anime) {
 	var data []Tracked
 
