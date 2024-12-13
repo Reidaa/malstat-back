@@ -1,0 +1,29 @@
+linters:
+  disable:
+    - tagliatelle
+    - wsl
+    - varnamelen
+    - exhaustruct
+    - depguard
+    - gci
+  enable:
+    - gofumpt
+    - thelper
+    - goimports
+    - tparallel
+    - wastedassign
+    - unparam
+    - prealloc
+    - unconvert
+    - exhaustive
+    - makezero
+    - nakedret
+  fast: false
+
+linters-settings:
+  exhaustive:
+    default-signifies-exhaustive: true
+
+run:
+  go: "1.23"
+  timeout: 10m

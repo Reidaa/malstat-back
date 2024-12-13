@@ -12,26 +12,19 @@ TARGET := scrapper
 # These will be provided to the target
 BUILD := `git rev-parse HEAD`
 
-BIN_DIR ?= bin
+BIN_DIR ?= dist
 CSV ?= malstat.csv
 DB ?= ${DATABASE}
 REPOSITORY ?= reidaa
 DOCKERFILE ?= build/Dockerfile
 DOCKERTAG ?= latest
-# Use linker flags to provide version/build settings to the target
-LDFLAGS := -ldflags "-X=main.Build=$(BUILD)"
-
 
 .PHONY: all build clean install uninstall check run deploy ansible
 
 all: build
 
-requirements:
-	go install github.com/daixiang0/gci@latest
-	go install mvdan.cc/gofumpt@latest
-
 $(TARGET):
-	go build $(LDFLAGS) -o $(BIN_DIR)/$(TARGET)
+	goreleaser build --clean --single-target --snapshot
 
 build: $(TARGET)
 	@true
@@ -44,6 +37,9 @@ install:
 
 uninstall: clean
 	rm -f $$(which ${TARGET})
+
+snapshot:
+	goreleaser release --clean --snapshot
 
 run: install
 	$(TARGET) scrap --top 100 --db $(DB)
@@ -63,9 +59,9 @@ ansible:
 deploy: build ansible clean
 
 lint: build
-	golangci-lint run --enable-all -D tagliatelle -D wsl -D varnamelen -D exhaustruct -D depguard -D goimports -D gci
+	golangci-lint run
 
-format:
+format: requirements
 	goimports -l -w *.go pkg cmd
 	gofumpt -l -w *.go pkg cmd
 
