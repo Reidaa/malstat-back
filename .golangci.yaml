@@ -1,28 +1,19 @@
 linters:
+  enable-all: true
   disable:
-    - tagliatelle
-    - wsl
-    - varnamelen
-    - exhaustruct
     - depguard
+    - exhaustruct
+    - exportloopref # Deprecated
+    - forbidigo
     - gci
-  enable:
-    - gofumpt
-    - thelper
-    - goimports
-    - tparallel
-    - wastedassign
-    - unparam
+    - gochecknoglobals
+    - gosec
+    - nestif
     - prealloc
-    - unconvert
-    - exhaustive
-    - makezero
-    - nakedret
+    - tagliatelle
+    - varnamelen
+    - wsl
   fast: false
-
-linters-settings:
-  exhaustive:
-    default-signifies-exhaustive: true
 
 run:
   go: "1.23"
