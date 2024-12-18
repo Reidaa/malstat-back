@@ -2,30 +2,36 @@ name: CI
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
 
 env:
-  GO_VERSION: "1.22"
+  GO_VERSION: "stable"
 
 jobs:
-  validation:
+  # Check if there is any dirty change for go mod tidy
+  go-mod:
     runs-on: ubuntu-latest
-    name: Checks and linters
     steps:
-      - name: Init
-        run: >
-          sudo apt-get update &&
-          sudo apt-get install -y build-essential golint
-
-      - name: Install golangci-lint
-        run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.55.2
-
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install Go
-        uses: actions/setup-go@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          go-version: ${{ env.GO_VERSION }}
+      - name: Check go mod
+        run: |
+          go mod tidy
+          git diff --exit-code go.mod
+          git diff --exit-code go.sum
 
-      - name: All checks
-        run: make ci_check
+  golangci-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: lint
+        uses: golangci/golangci-lint-action@v6.1.1
+        with:
+          version: latest

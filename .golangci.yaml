@@ -1,0 +1,25 @@
+linters:
+  enable-all: true
+  disable:
+    - depguard # False positive
+    - exhaustruct
+    - exportloopref # Deprecated
+    - forbidigo # Too strict
+    - gci
+    - gochecknoglobals
+    - gofumpt # False positive
+    - gosec
+    - nestif
+    - nlreturn
+    - noctx # Too strict
+    - prealloc # Too strict
+    - revive
+    - stylecheck # Too strict
+    - tagliatelle
+    - varnamelen
+    - wsl
+  fast: false
+
+run:
+  go: "1.23"
+  timeout: 10m

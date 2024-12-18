@@ -1,7 +1,8 @@
 .env
-.vscode
 out
 bin
+dist/
+ano
 
 # Created by https://www.toptal.com/developers/gitignore/api/goland+all,go
 # Edit at https://www.toptal.com/developers/gitignore?templates=goland+all,go
