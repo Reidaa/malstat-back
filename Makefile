@@ -7,7 +7,7 @@ endif
 SHELL := /bin/sh
 
 # The name of the executable
-TARGET := malstatback
+TARGET := ano
 
 CSV ?= malstat.csv
 DB ?= ${DATABASE}
@@ -47,3 +47,15 @@ deploy: build ansible clean
 
 lint: build
 	golangci-lint run
+
+docker:
+	docker build -t ${REPOSITORY}/${TARGET}:${DOCKERTAG} -f ${DOCKERFILE} .
+.PHONY: docker
+
+docker-build-debug:
+	docker build --progress=plain --no-cache -t ${REPOSITORY}/${TARGET}:debug -f ${DOCKERFILE} .
+.PHONY: docker-build-debug
+
+docker-run: docker
+	docker run -p 8080:8080 ${REPOSITORY}/${TARGET}:${DOCKERTAG} version
+.PHONY: docker-run

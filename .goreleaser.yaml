@@ -16,11 +16,11 @@ before:
 env:
   - REGISTRY=ghcr.io
 
-project_name: kokuback
+project_name: ano
 
 builds:
   - id: binary
-    binary: kokuback
+    binary: "{{ .ProjectName }}"
     main: main.go
     env:
       - CGO_ENABLED=0
