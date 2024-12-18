@@ -7,16 +7,17 @@ linters:
     - forbidigo
     - gci
     - gochecknoglobals
+    - gofumpt
     - gosec
     - nestif
+    - nlreturn
+    - noctx
     - prealloc
+    - revive
+    - stylecheck
     - tagliatelle
     - varnamelen
     - wsl
-    - stylecheck
-    - nlreturn
-    - revive
-    - gofumpt
   fast: false
 
 run:
