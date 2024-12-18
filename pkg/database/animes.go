@@ -9,7 +9,11 @@ import (
 	"gorm.io/gorm"
 )
 
-// Struct representing an anime record in the database
+const (
+	max_batch = 100
+)
+
+// Struct representing an anime record in the database.
 type animeDB struct {
 	gorm.Model
 	Timestamp  time.Time
@@ -49,6 +53,6 @@ func InsertAnimes(db *gorm.DB, animes []jikan.Anime) {
 	}
 
 	utils.Info.Println("Writing data to database")
-	db.CreateInBatches(&data, 100)
+	db.CreateInBatches(&data, max_batch)
 	utils.Info.Println("Finished writing data to database")
 }

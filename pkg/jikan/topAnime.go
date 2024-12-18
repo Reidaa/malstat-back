@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"net/http"
 	"sort"
 	"time"
 
@@ -27,10 +26,13 @@ func topAnime(page int, animeType string) (*topAnimeResponse, error) {
 
 	utils.Debug.Printf("GET %s", url)
 
-	response, err := http.Get(url)
+	// response, err := http.Get(url)
+	response, err := utils.NetClient.Get(url)
 	if err != nil {
 		return nil, err
 	}
+
+	defer response.Body.Close()
 
 	if response.StatusCode >= 300 {
 		return nil, errors.New(response.Status)
