@@ -13,6 +13,9 @@ before:
     - go mod tidy
     - go vet ./...
 
+env:
+  - REGISTRY=ghcr.io
+
 project_name: kokuback
 
 builds:
@@ -37,3 +40,20 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+
+dockers:
+  - use: docker
+    ids:
+      - binary
+    dockerfile: "build/goreleaser.dockerfile"
+    image_templates:
+      - "{{ .Env.REGISTRY }}/{{ .ProjectName }}:latest"
+      - "{{ .Env.REGISTRY }}/{{ .ProjectName }}:{{ .ShortCommit }}"
+      - "{{ .Env.REGISTRY }}/{{ .ProjectName }}:v{{ .Major }}"
+      - "{{ .Env.REGISTRY }}/{{ .ProjectName }}:v{{ .Major }}.{{ .Minor }}"
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
