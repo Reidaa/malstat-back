@@ -1,6 +1,6 @@
 FROM alpine:3
 
-ENTRYPOINT ["/kokuback"]
+ENTRYPOINT ["/ano"]
 
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
@@ -15,5 +15,5 @@ RUN adduser \
     appuser
 USER appuser
 
-COPY kokuback /
+COPY ano /
 
