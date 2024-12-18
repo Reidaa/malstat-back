@@ -51,6 +51,7 @@ dockers:
       - "{{ .Env.REGISTRY }}/{{ .ProjectName }}:{{ .ShortCommit }}"
       - "{{ .Env.REGISTRY }}/{{ .ProjectName }}:v{{ .Major }}"
       - "{{ .Env.REGISTRY }}/{{ .ProjectName }}:v{{ .Major }}.{{ .Minor }}"
+      - "{{ .Env.REGISTRY }}/{{ .ProjectName }}:v{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
     build_flag_templates:
       - "--pull"
       - "--label=org.opencontainers.image.created={{ .Date }}"
