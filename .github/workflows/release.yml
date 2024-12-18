@@ -6,7 +6,10 @@ on:
       - "v*"
 
 permissions:
-  contents: write
+  contents: read
+  packages: write
+  attestations: write
+  # id-token: write
 
 env:
   GO_VERSION: "stable"
