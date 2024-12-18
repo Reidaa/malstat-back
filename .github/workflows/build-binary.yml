@@ -1,7 +1,6 @@
 name: Build binary
 
 on:
-  push:
   pull_request:
 
 env:
