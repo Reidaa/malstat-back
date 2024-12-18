@@ -1,20 +1,20 @@
 linters:
   enable-all: true
   disable:
-    - depguard
+    - depguard # False positive
     - exhaustruct
     - exportloopref # Deprecated
-    - forbidigo
+    - forbidigo # Too strict
     - gci
     - gochecknoglobals
-    - gofumpt
+    - gofumpt # False positive
     - gosec
     - nestif
     - nlreturn
-    - noctx
-    - prealloc
+    - noctx # Too strict
+    - prealloc # Too strict
     - revive
-    - stylecheck
+    - stylecheck # Too strict
     - tagliatelle
     - varnamelen
     - wsl
