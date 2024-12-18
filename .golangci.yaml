@@ -13,6 +13,10 @@ linters:
     - tagliatelle
     - varnamelen
     - wsl
+    - stylecheck
+    - nlreturn
+    - revive
+    - gofumpt
   fast: false
 
 run:
