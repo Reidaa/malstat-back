@@ -13,15 +13,19 @@ before:
     - go mod tidy
     - go vet ./...
 
+project_name: kokuback
+
 builds:
   - id: binary
+    binary: kokuback
+    main: main.go
     env:
       - CGO_ENABLED=0
     goos:
       - linux
       - darwin
     ldflags:
-      - -s -w -X main.Version={{.Version}} -X main.Build={{.ShortCommit}}
+      - -s -w -X main.Version={{.Version}} -X main.Build={{.ShortCommit}} -X main.Name={{.ProjectName}}
 
 archives:
   - builds:
@@ -33,9 +37,3 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
-# dockers:
-#   - id: server
-#     ids:
-#       - binary
-#     image_templates:
-#       -
