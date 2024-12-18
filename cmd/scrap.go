@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"malstat/scrapper/internal"
 	"malstat/scrapper/pkg/utils"
 
@@ -26,7 +27,7 @@ func ScrapCmd(ctx *cli.Context) error {
 
 	err := internal.Scrap(top, connStr, csvFile)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to scrap the data: %w", err)
 	}
 
 	return nil

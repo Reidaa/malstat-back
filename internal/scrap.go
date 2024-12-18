@@ -1,10 +1,12 @@
 package internal
 
 import (
+	"fmt"
 	"malstat/scrapper/pkg/csv"
 	"malstat/scrapper/pkg/database"
 	"malstat/scrapper/pkg/jikan"
 	"malstat/scrapper/pkg/utils"
+	"time"
 )
 
 func Scrap(top int, connectionString string, csvFile string) error {
@@ -13,13 +15,13 @@ func Scrap(top int, connectionString string, csvFile string) error {
 	db, err := database.DB(connectionString)
 	if err != nil {
 		utils.Error.Println(err)
-		return err
+		return fmt.Errorf("failed to connect to database: %w", err)
 	}
 
 	err = database.Prepare(db)
 	if err != nil {
 		utils.Error.Println(err)
-		return err
+		return fmt.Errorf("failed to prepare the database: %w", err)
 	}
 
 	if len(database.RetrieveTracked(db)) >= jikan.MaxSafeHitPerDay {
@@ -29,7 +31,7 @@ func Scrap(top int, connectionString string, csvFile string) error {
 		topAnime, err := jikan.TopAnimeByRank(top)
 		if err != nil {
 			utils.Error.Println(err)
-			return err
+			return fmt.Errorf("failed retrieve the top %d anime: %w", top, err)
 		}
 		database.UpsertTrackedAnimes(db, topAnime)
 	}
@@ -39,6 +41,8 @@ func Scrap(top int, connectionString string, csvFile string) error {
 
 	for _, v := range tracked {
 		d, err := jikan.AnimeByID(v.MalID)
+		// To prevent -> 429 Too Many Requests
+		time.Sleep(jikan.Cooldown)
 		if err != nil {
 			utils.Warning.Println(err, "| Skipping this entry")
 		} else {
@@ -56,7 +60,7 @@ func Scrap(top int, connectionString string, csvFile string) error {
 		err = csv.AnimesToCsv(data, csvFile)
 		if err != nil {
 			utils.Error.Println(err)
-			return err
+			return fmt.Errorf("failed write data to csv file: %w", err)
 		}
 	}
 

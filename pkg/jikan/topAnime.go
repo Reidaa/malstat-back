@@ -2,9 +2,7 @@ package jikan
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
-	"io"
 	"sort"
 	"time"
 
@@ -24,28 +22,14 @@ func topAnime(page int, animeType string) (*topAnimeResponse, error) {
 		url = fmt.Sprintf("%s&type=%s", url, animeType)
 	}
 
-	utils.Debug.Printf("GET %s", url)
-
-	// response, err := http.Get(url)
-	response, err := utils.NetClient.Get(url)
+	responseData, err := utils.HttpGet(url)
 	if err != nil {
-		return nil, err
-	}
-
-	defer response.Body.Close()
-
-	if response.StatusCode >= 300 {
-		return nil, errors.New(response.Status)
-	}
-
-	responseData, err := io.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to request %s: %w", url, err)
 	}
 
 	err = json.Unmarshal(responseData, &responseObj)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal json data: %w", err)
 	}
 
 	// To prevent -> 429 Too Many Requests

@@ -1,6 +1,7 @@
 package csv
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -23,20 +24,20 @@ func AnimesToCsv(animes []jikan.Anime, filename string) error {
 	if utils.FileExists(filename) {
 		file, err = os.OpenFile(filename, os.O_RDWR, os.ModePerm)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to open file %s: %w", filename, err)
 		}
 		err = gocsv.UnmarshalFile(file, &data)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to unmarshal the CSV file %s: %w", filename, err)
 		}
 		_, err = file.Seek(0, 0)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to seek to start of file %s: %w", filename, err)
 		}
 	} else {
 		file, err = os.Create(filename)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to create file %s: %w", filename, err)
 		}
 	}
 
@@ -59,7 +60,7 @@ func AnimesToCsv(animes []jikan.Anime, filename string) error {
 
 	err = gocsv.MarshalFile(&data, file)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to marshal data to CSV file %s: %w", filename, err)
 	}
 
 	return nil
