@@ -32,7 +32,7 @@ re: clean build
 .PHONY: re
 
 run: build
-	./$(TARGET) scrap --top 100 --db $(DB)
+	./$(TARGET) scrap --top 10 --db $(DB)
 
 run-help: build
 	./$(TARGET) help
