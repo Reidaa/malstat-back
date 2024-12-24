@@ -1,13 +1,38 @@
 package cmd
 
 import (
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
-func ServeCmd(ctx *cli.Context) error {
+const DefaultPort = 8080
+
+type Server interface {
+	Start(port int) error
+}
+
+var ServeCmd = &cli.Command{
+	Name:  "serve",
+	Usage: "Start the REST API",
+	Flags: []cli.Flag{
+		&cli.IntFlag{
+			Name:     "port",
+			Required: false,
+			Usage:    "",
+			Value:    DefaultPort,
+		},
+	},
+	Action: runServe,
+}
+
+func runServe(ctx *cli.Context) error {
 	// var port = ctx.Int("port")
-	// if err := internal.Serve(ctx.Int("port")); err != nil {
+
+	// server := Server()
+
+	// err := server.St
+	// if err := serve(port); err != nil {
 	// 	return err
 	// }
+
 	return nil
 }

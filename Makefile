@@ -6,8 +6,10 @@ endif
 
 SHELL := /bin/sh
 
-# The name of the executable
 TARGET := ano
+
+GO_BUILD_ENV=CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+GO_FILES=$(shell go list ./... | grep -v /vendor/)
 
 CSV ?= malstat.csv
 DB ?= ${DATABASE}
@@ -20,13 +22,19 @@ DOCKERTAG ?= latest
 all: build
 
 $(TARGET):
-	go build -o $@ main.go
+	$(GO_BUILD_ENV) go build -v -o $@ .
 
 build: $(TARGET)
 	@true
 
 clean:
 	rm -f $(TARGET)
+
+vet:
+	go vet $(GO_FILES)
+
+fmt:
+	go fmt $(GO_FILES)
 
 re: clean build
 .PHONY: re
@@ -41,7 +49,7 @@ run-serve: build
 	./$(TARGET) serve
 
 ansible:
-	ansible-playbook deployments/ansible/deploy.yml -vv 
+	ansible-playbook deployments/ansible/deploy.yml -vv
 
 deploy: build ansible clean
 
