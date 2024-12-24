@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 
 	"github.com/reidaa/ano/cmd"
@@ -27,9 +27,6 @@ func main() {
 
 	err := app.Start(os.Args)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
-
-	os.Exit(0)
 }

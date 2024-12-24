@@ -8,11 +8,12 @@ import (
 	"github.com/reidaa/ano/pkg/jikan"
 	"github.com/reidaa/ano/pkg/utils"
 
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 var ScrapCmd = &cli.Command{
 	Name: "scrap",
+
 	Flags: []cli.Flag{
 		&cli.IntFlag{
 			Name:     "top",
@@ -24,6 +25,7 @@ var ScrapCmd = &cli.Command{
 			Usage:    "Record to database using the given postgreSQL connection `string`",
 			Required: false,
 			Value:    "none",
+			EnvVars:  []string{"ANO_DB_URL"},
 		},
 	},
 	Action: runScrap,
