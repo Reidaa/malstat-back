@@ -3,7 +3,8 @@ package jikan
 import (
 	"encoding/json"
 	"fmt"
-	"malstat/scrapper/pkg/utils"
+
+	"github.com/reidaa/ano/pkg/utils"
 )
 
 type AnimeResponse struct {

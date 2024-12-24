@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"malstat/scrapper/pkg/jikan"
-	"malstat/scrapper/pkg/utils"
+	"github.com/reidaa/ano/pkg/jikan"
+	"github.com/reidaa/ano/pkg/utils"
 
 	"github.com/gocarina/gocsv"
 )

@@ -6,7 +6,7 @@ import (
 	"sort"
 	"time"
 
-	"malstat/scrapper/pkg/utils"
+	"github.com/reidaa/ano/pkg/utils"
 )
 
 type topAnimeResponse struct {
